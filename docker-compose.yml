@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres
+    restart: always
+    env_file: .env
+
+  backend:
+    build: .
+    env_file: .env
+    restart: always
+    volumes:
+      - .:/app/
+    depends_on:
+      - postgres
+    working_dir: "/app"
+    expose:
+      - 8090
+    ports:
+      - "8090:8090"
+    command: ["python", "manage.py", "runserver", "0.0.0.0:8090"]
+
+volumes:
+  postgres_data:
